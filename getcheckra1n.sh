@@ -34,6 +34,7 @@ CPUArch=$(uname -m)
 Print_Style "System Architecture: $CPUArch" $YELLOW
 
 # Choose correct download link
+# TODO: dynamically fetch latest urls from checkra1n website
 if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
   Print_Style "ARM64 detected!" $YELLOW
   DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/0a640fd52276d5640bbf31c54921d1d266dc2303c1ed26a583a58f66a056bfea/checkra1n
@@ -65,7 +66,7 @@ echo -n "Install to /usr/bin (y/n)?"
   read answer
   if [ "$answer" != "${answer#[Yy]}" ]; then
     sudo cp checkra1n /usr/bin
-    Print_Style "Moved executable to /usr/bin" $GREEN
+    Print_Style "Copied executable to /usr/bin" $GREEN
   echo -n "Delete downloaded file (no longer needed)? (y/n)"
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
