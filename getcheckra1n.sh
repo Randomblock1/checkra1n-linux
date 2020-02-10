@@ -25,7 +25,7 @@ Print_Style () {
 
 # Downloads checkra1n
 GetJB () {
-  wget $DL_LINK -o checkra1n
+  wget $DL_LINK
   chmod 755 checkra1n
 }
 
