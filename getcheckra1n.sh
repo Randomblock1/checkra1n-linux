@@ -64,7 +64,7 @@ Print_Style "Done! Marked as executable!"
 echo -n "Install to /usr/bin (y/n)?"
   read answer
   if [ "$answer" != "${answer#[Yy]}" ]; then
-    sudo mv checkra1n /usr/bin
+    sudo cp checkra1n /usr/bin
     Print_Style "Moved executable to /usr/bin" $GREEN
   echo -n "Delete downloaded file (no longer needed)? (y/n)"
     read answer
