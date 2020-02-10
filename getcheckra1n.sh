@@ -66,5 +66,10 @@ echo -n "Install to /usr/bin (y/n)?"
   if [ "$answer" != "${answer#[Yy]}" ]; then
     sudo mv checkra1n /usr/bin
     Print_Style "Moved executable to /usr/bin" $GREEN
+  echo -n "Delete downloaded file (no longer needed)? (y/n)"
+    read answer
+    if [ "$answer" != "${answer#[Yy]}" ]; then
+    rm checkra1n
+    fi
   fi
 Print_Style "All done!" $MAGENTA
