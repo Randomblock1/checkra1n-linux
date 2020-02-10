@@ -55,7 +55,6 @@ else
   Print_Style "Unknown/Unsuported architecture! Exiting..." $RED
   DL_LINK=UNKNOWN
   exit
-
 fi
 
 Print_Style "Getting checkra1n..." $GREEN
@@ -73,4 +72,4 @@ echo -n "Install to /usr/bin (y/n)?"
     rm checkra1n
     fi
   fi
-Print_Style "All done!" $MAGENTA
+Print_Style "All done!" $BLUE
