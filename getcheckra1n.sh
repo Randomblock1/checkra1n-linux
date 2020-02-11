@@ -39,7 +39,7 @@ if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
   Print_Style "ARM64 detected!" $YELLOW
   DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/0a640fd52276d5640bbf31c54921d1d266dc2303c1ed26a583a58f66a056bfea/checkra1n
   
-elif [[ "$CPUArch" == *"armhf"* || *"armv"* ]]; then
+elif [[ "$CPUArch" == *"armhf"* || "$CPUArch" == *"armv"* ]]; then
   Print_Style "ARM detected!" $YELLOW
   DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm/5f7d4358971eb2823413801babbac0158524da80c103746e163605d602ff07bf/checkra1n
   
