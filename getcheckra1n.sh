@@ -72,4 +72,9 @@ echo -n "Install to /usr/bin (y/n)?"
     rm checkra1n
     fi
   fi
+if [ -f "/etc/debian_version" ];
+    Print_Style "Debian detected! Getting dependencies!" $BLUE
+    ## I think these are the only dependencies needed, but I'm not entirely sure
+    apt install -y usbmuxd libimobiledevice6
+fi
 Print_Style "All done!" $BLUE
