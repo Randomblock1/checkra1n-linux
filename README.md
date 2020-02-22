@@ -12,4 +12,5 @@ If you are on any other system or any other architecture, use getcheckra1n. This
 Please put any issues in the GitHub Issue tracker. Feel free to make pull requests.
 
 ## TODO
-todo: dynamically fetch the download URLs from the website instead of hardcoding them
+TODO: dynamically fetch the download URLs from the website instead of hardcoding them
+TODO: use whiptail to make dialog boxes instead of standard (y/n) input
