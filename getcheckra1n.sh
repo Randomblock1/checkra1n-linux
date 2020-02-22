@@ -23,6 +23,11 @@ Print_Style () {
   printf "%s\n" "${2}$1${NORMAL}"
 }
 
+if [ "$EUID" -ne 0 ]
+  then Print_Style "YOU AREN'T RUNNING AS ROOT! This script needs root, use sudo!" $RED
+  exit
+fi
+
 # Downloads checkra1n
 GetJB () {
   wget $DL_LINK
