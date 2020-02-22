@@ -1,5 +1,5 @@
 #!/bin/bash
-# Checkra1n Easy Install
+# Checkra1n Easy Installer
 # GitHub Repository: https://github.com/Randomblock1/Checkra1n-Linux
 
 # Terminal colors
@@ -28,6 +28,13 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+if [ "$BASH_VERSION" = '' ]; then
+    Print_Style "Warning: this script must be run in bash!" $RED
+    exit
+else
+    Print_Style "Bash detected. Good." $GREEN
+fi
+
 # Downloads checkra1n
 GetJB () {
   wget $DL_LINK
@@ -37,6 +44,48 @@ GetJB () {
 # Check system architecture
 CPUArch=$(uname -m)
 Print_Style "System Architecture: $CPUArch" $YELLOW
+
+# Get Linux distribution
+# Stolen from Stack Overflow lol
+if [ -f /etc/os-release ]; then
+    # freedesktop.org and systemd
+    . /etc/os-release
+    OS=$NAME
+    VER=$VERSION_ID
+elif type lsb_release >/dev/null 2>&1; then
+    # linuxbase.org
+    OS=$(lsb_release -si)
+    VER=$(lsb_release -sr)
+elif [ -f /etc/lsb-release ]; then
+    # For some versions of Debian/Ubuntu without lsb_release command
+    . /etc/lsb-release
+    OS=$DISTRIB_ID
+    VER=$DISTRIB_RELEASE
+elif [ -f /etc/debian_version ]; then
+    # Older Debian/Ubuntu/etc.
+    OS=Debian
+    VER=$(cat /etc/debian_version)
+elif [ -f /etc/SuSe-release ]; then
+    # Older SuSE/etc.
+    ...
+elif [ -f /etc/redhat-release ]; then
+    # Older Red Hat, CentOS, etc.
+    ...
+else
+    # Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
+    OS=$(uname -s)
+    VER=$(uname -r)
+fi
+
+# Determine Linux distro
+
+if [[ "$OS" == *"Raspbian"* ]]; then
+  DEPENDENCIES="usbmuxd libimobiledevice6"
+  
+else
+  Print_Style "I don't know what dependencies you need for this distro. Using defaults for Raspbian..." $RED
+  DEPENDENCIES="usbmuxd libimobiledevice6"
+fi
 
 # Choose correct download link
 # TODO: dynamically fetch latest urls from checkra1n website
@@ -77,9 +126,8 @@ echo -n "Install to /usr/bin (y/n)?"
     rm checkra1n
     fi
   fi
-if [ -f "/etc/debian_version" ];
-    Print_Style "Debian detected! Getting dependencies!" $BLUE
-    ## I think these are the only dependencies needed, but I'm not entirely sure
-    apt install -y usbmuxd libimobiledevice6
+Print_Style "Attenpting to install dependencies." $BLUE
+# TODO: detect if yum or others are needed
+  apt install -y $DEPENDENCIES
 fi
 Print_Style "All done!" $BLUE
