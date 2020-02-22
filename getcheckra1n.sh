@@ -52,14 +52,14 @@ elif [[ "$CPUArch" == *"x86"* ]]; then
   DL_LINK=https://assets.checkra.in/downloads/linux/cli/i486/26952e013ece4d0e869fc9179bfd2b1f6c319cdc707fadf44fdb56fa9e62f454/checkra1n
 
 else
-  Print_Style "Unknown/Unsuported architecture! Exiting..." $RED
+  Print_Style "ERROR: Unknown/Unsuported architecture! Please try again, make sure your architecture is supported by checkra1n and that you're using sh instead of bash." $RED
   DL_LINK=UNKNOWN
   exit
 fi
 
 Print_Style "Getting checkra1n..." $GREEN
 GetJB
-Print_Style "Done! Marked as executable!"
+Print_Style "Done! Marked as executable!" $GREEN
 
 echo -n "Install to /usr/bin (y/n)?"
   read answer
