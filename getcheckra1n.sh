@@ -128,6 +128,5 @@ echo -n "Install to /usr/bin (y/n)?"
   fi
 Print_Style "Attenpting to install dependencies." $BLUE
 # TODO: detect if yum or others are needed
-  apt install -y $DEPENDENCIES
-fi
+apt install -y $DEPENDENCIES
 Print_Style "All done!" $BLUE
