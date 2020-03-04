@@ -105,52 +105,52 @@ function mainMenu() {
       DEPENDENCIES="usbmuxd libimobiledevice6"
   
     else
-      Print_Style "I do not know what dependencies you need for this distro ($OS). Using defaults for Raspbian..." "$RED"
+      Print_Style "I do not know what dependencies you need for this distro ($OS). Using defaults for Raspbian..." $RED
       DEPENDENCIES="usbmuxd libimobiledevice6"
     fi
 
     # Choose correct download link
     # TODO: dynamically fetch latest urls from checkra1n website
     if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
-      Print_Style "ARM64 detected!" "$YELLOW"
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/0a640fd52276d5640bbf31c54921d1d266dc2303c1ed26a583a58f66a056bfea/checkra1n
+      Print_Style "ARM64 detected!" $YELLOW
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/22b44f8b3fb5536d67057951629648bda3e3406c9afb042151de89ff24592ea7/checkra1n
   
     elif [[ "$CPUArch" == *"armhf"* || "$CPUArch" == *"armv"* ]]; then
-      Print_Style "ARM detected!" "$YELLOW"
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm/5f7d4358971eb2823413801babbac0158524da80c103746e163605d602ff07bf/checkra1n
+      Print_Style "ARM detected!" $YELLOW
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm/0848bac6a57dc0d9a64ff129a253e24efcb535434a065373a63b8e9ef4fe63ac/checkra1n
   
     elif [[ "$CPUArch" == *"x86_64"* ]]; then
-      Print_Style "x86_64 detected!" "$YELLOW"
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/x86_64/eda98d55f500a9de75aee4e7179231ed828ac2f5c7f99c87442936d5af4514a4/checkra1n
+      Print_Style "x86_64 detected!" $YELLOW
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/x86_64/3283cab4ad44dd1ded467ed403ba5f603c6de015a7c3bdf0b1f9ef211cd06b6d/checkra1n
 
     elif [[ "$CPUArch" == *"x86"* ]]; then
-      Print_Style "x86 detected!" "$YELLOW"
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/i486/26952e013ece4d0e869fc9179bfd2b1f6c319cdc707fadf44fdb56fa9e62f454/checkra1n
+      Print_Style "x86 detected!" $YELLOW
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/i486/f7db665fc668edf610a779102c0d41db6bcfc24df9868064091e4b7993891982/checkra1n
 
     else
-      Print_Style "ERROR: Unknown/Unsuported architecture! Make sure your architecture is supported by checkra1n." "$RED"
+      Print_Style "ERROR: Unknown/Unsuported architecture! Make sure your architecture is supported by checkra1n." $RED
       DL_LINK=UNKNOWN
       exit
     fi
 
-    Print_Style "Getting checkra1n..." "$GREEN"
+    Print_Style "Getting checkra1n..." $GREEN
     GetJB
-    Print_Style "Done! Marked as executable!" "$GREEN"
-    Print_Style "Install to /usr/bin (y/n?)" "$YELLOW"
+    Print_Style "Done! Marked as executable!" $GREEN
+    Print_Style "Install to /usr/bin (y/n?)" $YELLOW
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
       cp checkra1n /usr/bin
-      Print_Style "Copied executable to /usr/bin" "$GREEN"
-      Print_Style "Delete downloaded file (no longer needed)? (y/n)" "$YELLOW"
+      Print_Style "Copied executable to /usr/bin" $GREEN
+      Print_Style "Delete downloaded file (no longer needed)? (y/n)" $YELLOW
       read answer
         if [ "$answer" != "${answer#[Yy]}" ]; then
           rm checkra1n
         fi
     fi
-    Print_Style "Attenpting to install dependencies." "$BLUE"
+    Print_Style "Attenpting to install dependencies." $BLUE
     # TODO: detect if yum or others are needed
     apt install -y "$DEPENDENCIES"
-    Print_Style "All done!" "$BLUE"
+    Print_Style "All done!" $BLUE
     ;;
     "Credits")
     whiptail --title "Checkra1n GUI Installer" --msgbox "Checkra1n GUI Installer made by Randomblock1.\nThis project is open source! Check out https://github.com/Randomblock1/Checkra1n-Linux! \nFollow me on Twitter @randomblock1_! \nPlease report all bugs in the GitHub issue tracker and feel free to make pull requests! \nINFO: $OS $(uname -mo) \nVERSION: $VERSION" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
