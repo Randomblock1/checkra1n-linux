@@ -4,12 +4,16 @@ Works on x86, x86_64, ARM and ARM64!
 Tested on: multiple VMs and some RPis
 By @randomblock1_
 
-## how to use
-Installer.sh is probably the best script for you. Simply run ```./installer.sh``` in bash. If you are on a Debian based system *and* running x86_64, use the "install repo" option in the GUI. This will install the repo and install checkra1n from that repo.
+## one liner
+download without installing using bash: ```curl -s https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/installer.sh | sudo bash```
+(note: selecting the update option will install it to your machine)
 
-If you are on any other system or any other architecture, use "direct download" in the GUI. This downloads the correct binary and lets you put it in /usr/bin. The repo only contains x86_64 files, which is why this script is needed.
+## how to use
+Use the "Install Repo" option if you are on x86_64. Otherwise, use "Direct Download". "Credits" is self explanatory, and "Update" uses git to get the latest version of this tool and installs it.
+
+If you are not on a Debian based system, you may need to install additional dependencies. Just google any errors and see if it means you're missing something.
 
 Please put any issues in the GitHub Issue tracker. Feel free to make pull requests.
 
-## TODO
+## todo
 TODO: dynamically fetch the download URLs from the website instead of hardcoding them
