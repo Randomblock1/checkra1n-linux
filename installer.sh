@@ -149,7 +149,7 @@ function mainMenu() {
     fi
     Print_Style "Attenpting to install dependencies." $BLUE
     # TODO: detect if yum or others are needed
-    apt install -y "$DEPENDENCIES"
+    apt install -y $DEPENDENCIES
     Print_Style "All done!" $BLUE
     ;;
     "Credits")
