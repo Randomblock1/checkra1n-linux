@@ -136,16 +136,14 @@ function mainMenu() {
     Print_Style "Getting checkra1n..." $GREEN
     GetJB
     Print_Style "Done! Marked as executable!" $GREEN
-    Print_Style "Install to /usr/bin (y/n?)" $YELLOW
-    read answer
-    if [ "$answer" != "${answer#[Yy]}" ]; then
+    whiptail --yesno "Install checkra1n to /usr/bin/ so you can execute it anywhere?" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
+    if [ "$?" != "0" ]; then
       cp checkra1n /usr/bin
       Print_Style "Copied executable to /usr/bin" $GREEN
-      Print_Style "Delete downloaded file (no longer needed)? (y/n)" $YELLOW
-      read answer
-        if [ "$answer" != "${answer#[Yy]}" ]; then
+      whiptail --yesno "Delete downloaded file (no longer needed)?" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
+      if [ "$?" != "0" ]; then
           rm checkra1n
-        fi
+      fi
     fi
     Print_Style "Attenpting to install dependencies." $BLUE
     # TODO: detect if yum or others are needed
