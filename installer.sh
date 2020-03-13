@@ -45,7 +45,7 @@ function mainMenu() {
     "Install Repo" "Install the repo. x86_64 ONLY!" \
     "Direct Download" "Use on any architecture." \
     "Credits" "This tool is open-source!" \
-    "Update" "Download latest version" 3>&1 1>&2 2>&3)
+    "Update/Reinstall" "Download latest version" 3>&1 1>&2 2>&3)
   case $CHOICE in
     "Install Repo")
     echo "Adding repo..."
@@ -153,7 +153,7 @@ function mainMenu() {
     whiptail --title "Checkra1n GUI Installer" --msgbox "Checkra1n GUI Installer made by Randomblock1.\nThis project is open source! Check out https://github.com/Randomblock1/Checkra1n-Linux! \nFollow me on Twitter @randomblock1_! \nPlease report all bugs in the GitHub issue tracker and feel free to make pull requests! \nINFO: $OS $(uname -mo) \nVERSION: $VERSION" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
     mainMenu
     ;;
-    "Update")
+    "Update/Reinstall")
     whiptail --title "Checkra1n GUI Installer" --yesno "Update to latest version?" $((LINES/2)) $((COLUMNS*7/10))
     case $? in
       1)
