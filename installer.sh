@@ -113,20 +113,19 @@ function mainMenu() {
     # TODO: dynamically fetch latest urls from checkra1n website
     if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
       Print_Style "ARM64 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/22b44f8b3fb5536d67057951629648bda3e3406c9afb042151de89ff24592ea7/checkra1n
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/1985cee5704ed152d7a59efbcda5dab409824eeed5ebb23779965511b1733e28/checkra1n
   
     elif [[ "$CPUArch" == *"armhf"* || "$CPUArch" == *"armv"* ]]; then
       Print_Style "ARM detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm/0848bac6a57dc0d9a64ff129a253e24efcb535434a065373a63b8e9ef4fe63ac/checkra1n
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm/c5cbb125c6948b39383702b62cec4f184263c8db50f49b9328013213126dae78/checkra1n
   
     elif [[ "$CPUArch" == *"x86_64"* ]]; then
       Print_Style "x86_64 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/x86_64/3283cab4ad44dd1ded467ed403ba5f603c6de015a7c3bdf0b1f9ef211cd06b6d/checkra1n
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/x86_64/9f215d8c5a1b6cea717c927b86840b9d1f713d42a24626be3a0408a4f6ba0f4d/checkra1n
 
     elif [[ "$CPUArch" == *"x86"* ]]; then
       Print_Style "x86 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/i486/f7db665fc668edf610a779102c0d41db6bcfc24df9868064091e4b7993891982/checkra1n
-
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/i486/4785390cf41dfbf4478bce4b69a00ec00a82ebab0a1c8dc364a8fe1b6fc664c0/checkra1n
     else
       Print_Style "ERROR: Unknown/Unsuported architecture! Make sure your architecture is supported by checkra1n." $RED
       DL_LINK=UNKNOWN
@@ -136,16 +135,14 @@ function mainMenu() {
     Print_Style "Getting checkra1n..." $GREEN
     GetJB
     Print_Style "Done! Marked as executable!" $GREEN
-    Print_Style "Install to /usr/bin (y/n?)" $YELLOW
-    read answer
-    if [ "$answer" != "${answer#[Yy]}" ]; then
+    whiptail --yesno "Install checkra1n to /usr/bin/ so you can execute it anywhere?" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
+    if [ "$?" != "0" ]; then
       cp checkra1n /usr/bin
       Print_Style "Copied executable to /usr/bin" $GREEN
-      Print_Style "Delete downloaded file (no longer needed)? (y/n)" $YELLOW
-      read answer
-        if [ "$answer" != "${answer#[Yy]}" ]; then
+      whiptail --yesno "Delete downloaded file (no longer needed)?" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
+      if [ "$?" != "0" ]; then
           rm checkra1n
-        fi
+      fi
     fi
     Print_Style "Attenpting to install dependencies." $BLUE
     # TODO: detect if yum or others are needed
