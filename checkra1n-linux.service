@@ -1,0 +1,12 @@
+[Unit]
+Description=Checkra1n-Linux Autostart checkra1n
+After=multi-user.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/use/bin/checkra1n -cE
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
