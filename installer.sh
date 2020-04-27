@@ -171,8 +171,8 @@ function mainMenu() {
       if [ "$?" != "0" ]; then
         wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux.service
         chmod 644 checkra1n-linux.service
-        mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
-        Print_Style "Moved service to /lib/systemd/system" $GREEN
+        mv checkra1n-linux.service /lib/systemd/user/checkra1n-linux.service
+        Print_Style "Moved service to /lib/systemd/user/" $GREEN
         Print_Style "Enabling service..." $GREEN
         systemctl daemon-reload
         systemctl enable checkra1n-linux
@@ -187,8 +187,8 @@ function mainMenu() {
       if [ "$?" != "0" ]; then
         wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux-webra1n.service
         chmod 644 checkra1n-linux.service
-        mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
-        Print_Style "Moved service to /lib/systemd/system" $GREEN
+        mv checkra1n-linux.service /lib/systemd/user/checkra1n-linux.service
+        Print_Style "Moved service to /lib/systemd/user/" $GREEN
         Print_Style "Enabling service..." $GREEN
         systemctl daemon-reload
         systemctl enable checkra1n-linux
