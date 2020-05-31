@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple
 User=root
-ExecStart=/use/bin/checkra1n -w localhost 8081
+ExecStart=/usr/bin/checkra1n -w localhost 8081
 Restart=always
 
 [Install]

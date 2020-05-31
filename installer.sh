@@ -172,7 +172,7 @@ function mainMenu() {
         wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux.service
         chmod 644 checkra1n-linux.service
         mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
-        Print_Style "Moved service to /lib/systemd/system" $GREEN
+        Print_Style "Moved service to /lib/systemd/system/" $GREEN
         Print_Style "Enabling service..." $GREEN
         systemctl daemon-reload
         systemctl enable checkra1n-linux
@@ -188,7 +188,7 @@ function mainMenu() {
         wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux-webra1n.service
         chmod 644 checkra1n-linux.service
         mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
-        Print_Style "Moved service to /lib/systemd/system" $GREEN
+        Print_Style "Moved service to /lib/systemd/system/" $GREEN
         Print_Style "Enabling service..." $GREEN
         systemctl daemon-reload
         systemctl enable checkra1n-linux
@@ -196,7 +196,7 @@ function mainMenu() {
         Print_Style "Success!"$ $GREEN
         NET_IP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1`
         whiptail --title "Using Checkra1n Autostart Service" --msgbox "This installation is now configured to autostart webra1n on boot. \nThis means that you must use a web browser and access this device's local IP via WiFi or Ethernet at port 8081. \nCurrent local URL: \n$NET_IP:8081/ \nNote: this will change if the device connects to a different network or loses connection."
-      if
+      fi
       mainMenu
     esac
     ;;
