@@ -122,19 +122,19 @@ function mainMenu() {
     # TODO: dynamically fetch latest urls from checkra1n website
     if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
       Print_Style "ARM64 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/ed074035bea72ae6a15a37c5900ed5bb4d0a74ccca5bc8c02f4575b45daecc3e/checkra1n-aarch64
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/32cc7d1bd687800d1b5bc5cfc4f4ca15f393dada7570e78742eab068b1f2a3e2/checkra1n
   
     elif [[ "$CPUArch" == *"armhf"* || "$CPUArch" == *"armv"* ]]; then
       Print_Style "ARM detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm/1ed46fb34c72ee942a1af185fd5347b999f4bba667d594dd56554e3b3d3ea417/checkra1n-armel
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm/dde0ee4255403a427636bb76e09e409487f8be128af4b7d89fac78548bd5b35a/checkra1n
   
     elif [[ "$CPUArch" == *"x86_64"* ]]; then
       Print_Style "x86_64 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/x86_64/b0edbb87a5e084caf35795dcb3b088146ad5457235940f83e007f59ca57b319c/checkra1n-x86_64
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/x86_64/607faa865e90e72834fce04468ae4f5119971b310ecf246128e3126db49e3d4f/checkra1n
 
     elif [[ "$CPUArch" == *"x86"* ]]; then
       Print_Style "x86 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/i486/9b7a5c7821c8e06a334b854c5ffad7b28c56a5ac261afe3c6b647c9ba7185aee/checkra1n-i486
+      DL_LINK=https://assets.checkra.in/downloads/linux/cli/i486/53d45283b5616d9f0daa8a265362b65a33ce503b3088528cc2839544e166d4c6/checkra1n
     else
       Print_Style "ERROR: Unknown/Unsuported architecture! Make sure your architecture is supported by checkra1n." $RED
       DL_LINK=UNKNOWN
@@ -146,11 +146,11 @@ function mainMenu() {
     Print_Style "Done! Marked as executable!" $GREEN
     # Ask user if they want it copied to /usr/bin for easy $PATH access
     whiptail --yesno "Install checkra1n to /usr/bin/ so you can execute it anywhere?" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-    if [ "$?" != "0" ]; then
+    if [ "$?" = "0" ]; then
       cp checkra1n /usr/bin
       Print_Style "Copied executable to /usr/bin" $GREEN
       whiptail --yesno "Delete downloaded file (no longer needed)?" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-      if [ "$?" != "0" ]; then
+      if [ "$?" = "0" ]; then
           rm checkra1n
       fi
     fi
@@ -168,7 +168,7 @@ function mainMenu() {
     case $CHOICE in
     "Install Automatic checkra1n")
       whiptail --yesno "Install autostart service? This requires you to put your device into DFU mode manually it to work." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-      if [ "$?" != "0" ]; then
+      if [ "$?" = "0" ]; then
         wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux.service
         chmod 644 checkra1n-linux.service
         mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
@@ -184,7 +184,7 @@ function mainMenu() {
       ;;
       "Install Automatic webra1n")
       whiptail --yesno "Install autostart service? This requires you to use a web browser on a different device to jailbreak." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-      if [ "$?" != "0" ]; then
+      if [ "$?" = "0" ]; then
         wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux-webra1n.service
         chmod 644 checkra1n-linux.service
         mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
