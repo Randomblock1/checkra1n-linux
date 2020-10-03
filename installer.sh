@@ -1,7 +1,7 @@
 #!/bin/bash
 # Checkra1n Easy Installer
 # GitHub Repository: https://github.com/Randomblock1/Checkra1n-Linux
-VERSION=1.1
+VERSION=1.2
 # Terminal colors
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
@@ -54,6 +54,24 @@ LISTHEIGHT=$((LINES/3))
 
 # get system architecture
 CPUArch=$(uname -m)
+
+ScriptUpdate () {
+  ONLINE_`curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 4 | grep "VERSION"`
+  if [ "$ONLINE_VERSION" -gt "$VERSION" ]
+  Print_Style "Updating..." $GREEN
+      mkdir checkra1n-linux
+      cd checkra1n-linux
+      wget https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh
+      chmod 755 *.sh
+      mv -f * ..
+      cd ..
+      rm -R checkra1n-linux
+      Print_Style "Completed!" $GREEN
+     ./installer.sh
+  else
+  Print_Style "Script is up to date!" $GREEN
+  fi
+}
 
 function mainMenu() {
   CHOICE=$(whiptail \
@@ -226,16 +244,7 @@ function mainMenu() {
       mainMenu
       ;;
       0)
-      Print_Style "Updating..." $GREEN
-      mkdir checkra1n-linux
-      cd checkra1n-linux
-      wget https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/installer.sh
-      chmod 755 *.sh
-      mv -f * ..
-      cd ..
-      rm -R checkra1n-linux
-      Print_Style "Completed!" $GREEN
-     ./installer.sh
+      ScriptUpdate
    esac
   esac
 }
