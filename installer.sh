@@ -1,7 +1,7 @@
 #!/bin/bash
 # Checkra1n Easy Installer
 # GitHub Repository: https://github.com/Randomblock1/Checkra1n-Linux
-VERSION=1.0
+VERSION=1.1
 # Terminal colors
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
