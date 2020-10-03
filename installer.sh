@@ -34,6 +34,20 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+if ! command -v curl &> /dev/null
+then
+    Print_Style "cURL could not be found" $RED
+    Print_Style "Please install cURL (try 'apt install curl')" $RED
+    exit
+fi
+
+if ! command -v grep &> /dev/null
+then
+    Print_Style "grep could not be found" $RED
+    Print_Style "Please install grep (try 'apt install grep')"
+    exit
+fi
+
 LINES=$(tput lines)
 COLUMNS=$(tput cols)
 LISTHEIGHT=$((LINES/3))
@@ -49,7 +63,7 @@ function mainMenu() {
     "Direct Download" "Use on any architecture." \
     "Install Autostart Service" "Automatically start checkra1n on boot." \
     "Credits" "This tool is open-source!" \
-    "Update/Reinstall" "Download latest version" 3>&1 1>&2 2>&3)
+    "Update/Reinstall" "Update this tool" 3>&1 1>&2 2>&3)
   case $CHOICE in
     "Install Repo")
     if [[ "$CPUArch" == *"x86_64"* ]]; then
@@ -69,7 +83,7 @@ function mainMenu() {
     "Direct Download")
     # Downloads checkra1n
     GetJB () {
-      wget -O checkra1n "$DL_LINK"
+      curl "$DL_LINK" -o checkra1n
       chmod 755 checkra1n
     }
 
@@ -117,26 +131,26 @@ function mainMenu() {
       Print_Style "I do not know what dependencies you need for this distro ($OS). Using defaults for Raspbian..." $RED
       DEPENDENCIES="usbmuxd libimobiledevice6"
     fi
-
+    
+    Print_Style "Getting latest download..." $YELLOW
     # Choose correct download link
-    # TODO: dynamically fetch latest urls from checkra1n website
     if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
       Print_Style "ARM64 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm64/b48774e5d240ce192016a3fa97df7ef855220576f0704c83ed627d092cb2e224/checkra1n
+      DL_LINK=`curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/arm64\/.*\/checkra1n" -o`
   
     elif [[ "$CPUArch" == *"armhf"* || "$CPUArch" == *"armv"* ]]; then
       Print_Style "ARM detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/arm/d751f4b245bd4071c571654607ca4058e9e7dc4a5fa30639024b6067eebf5c3b/checkra1n
+      DL_LINK=`curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/arm\/.*\/checkra1n" -o`
   
     elif [[ "$CPUArch" == *"x86_64"* ]]; then
       Print_Style "x86_64 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/x86_64/fa08102ba978746ff38fc4c1a0d2e8f231c2cbf79c7ef6d7b504e4683a5b7d05/checkra1n
+      DL_LINK=`curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/x86_64\/.*\/checkra1n" -o`
 
     elif [[ "$CPUArch" == *"x86"* ]]; then
       Print_Style "x86 detected!" $YELLOW
-      DL_LINK=https://assets.checkra.in/downloads/linux/cli/i486/6f3885184dbdb5af4fec8c57e5684f914b9838ce7d6f78db5e9d2687d741b8f1/checkra1n
+      DL_LINK=`curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/i486\/.*\/checkra1n" -o`
     else
-      Print_Style "ERROR: Unknown/Unsuported architecture! Make sure your architecture is supported by checkra1n." $RED
+      Print_Style "ERROR: Unknown/Unsupported architecture! Make sure your architecture is supported by checkra1n." $RED
       DL_LINK=UNKNOWN
       exit
     fi
