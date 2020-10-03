@@ -34,6 +34,20 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
+if ! command -v curl &> /dev/null
+then
+    Print_Style "cURL could not be found" $RED
+    Print_Style "Please install cURL (try 'apt install curl')" $RED
+    exit
+fi
+
+if ! command -v grep &> /dev/null
+then
+    Print_Style "grep could not be found" $RED
+    Print_Style "Please install grep (try 'apt install grep')"
+    exit
+fi
+
 LINES=$(tput lines)
 COLUMNS=$(tput cols)
 LISTHEIGHT=$((LINES/3))
@@ -49,7 +63,7 @@ function mainMenu() {
     "Direct Download" "Use on any architecture." \
     "Install Autostart Service" "Automatically start checkra1n on boot." \
     "Credits" "This tool is open-source!" \
-    "Update/Reinstall" "Download latest version" 3>&1 1>&2 2>&3)
+    "Update/Reinstall" "Update this tool" 3>&1 1>&2 2>&3)
   case $CHOICE in
     "Install Repo")
     if [[ "$CPUArch" == *"x86_64"* ]]; then
