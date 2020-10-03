@@ -56,7 +56,7 @@ LISTHEIGHT=$((LINES/3))
 CPUArch=$(uname -m)
 
 ScriptUpdate () {
-  ONLINE_`curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 4 | grep "VERSION"`
+  export ONLINE_`curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 4 | grep "VERSION"`
   if [ "$ONLINE_VERSION" -gt "$VERSION" ]
   Print_Style "Updating..." $GREEN
       mkdir checkra1n-linux
@@ -67,9 +67,10 @@ ScriptUpdate () {
       cd ..
       rm -R checkra1n-linux
       Print_Style "Completed!" $GREEN
+      whiptail --title "Script Updated" --msgbox "This script has been automatically updated to version `echo $ONLINE_VERSION`!" $((LINES/2)) $((COLUMNS*7/10))
      ./installer.sh
   else
-  Print_Style "Script is up to date!" $GREEN
+  Print_Style "Script is already up to date!" $GREEN
   fi
 }
 
@@ -248,4 +249,6 @@ function mainMenu() {
    esac
   esac
 }
+
+ScriptUpdate
 mainMenu
