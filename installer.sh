@@ -83,7 +83,7 @@ function mainMenu() {
     "Direct Download")
     # Downloads checkra1n
     GetJB () {
-      wget -O checkra1n "$DL_LINK"
+      curl "$DL_LINK" -o checkra1n
       chmod 755 checkra1n
     }
 
