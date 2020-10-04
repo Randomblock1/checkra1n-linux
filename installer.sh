@@ -126,7 +126,7 @@ Print_Style "Getting latest download..." $YELLOW
 }
 
 ScriptUpdate () {
-  export ONLINE_`curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 4 | grep "VERSION"`
+  ONLINE_`curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 4 | grep "VERSION"`
   if [ "$ONLINE_VERSION" != "$VERSION" ]; then
   Print_Style "Updating..." $GREEN
       mkdir checkra1n-linux
@@ -146,8 +146,8 @@ ScriptUpdate () {
 
 GetJB () {
   Print_Style "Getting checkra1n..." $GREEN
-  curl "$DL_LINK" -o checkra1n
-  chmod 755 checkra1n
+  curl "$DL_LINK" -o /usr/bin/checkra1n
+  chmod 755 /usr/bin/checkra1n
 }
 
 Checkra1nChecker () {
@@ -179,13 +179,7 @@ GetDependencies
 GetDL
 GetJB
 Print_Style "Done! Marked as executable!" $GREEN
-cp checkra1n /usr/bin
-Print_Style "Copied executable to /usr/bin" $GREEN
-whiptail --yesno "Delete downloaded file (no longer needed)?" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-  if [ "$?" = "0" ]; then
-    rm checkra1n
-  fi
-Print_Style "All done!" $BLUE
+Print_Style "All done!" $BLINK
 }
 
 InstallRepo () {
