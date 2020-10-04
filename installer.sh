@@ -82,11 +82,11 @@ GetDependencies () {
 # Determine Linux distro dependencies
 
 if [[ "$OS" == *"Raspbian"* ]]; then
-  DEPENDENCIES="usbmuxd libimobiledevice6 curl grep"
+  DEPENDENCIES="usbmuxd libimobiledevice6 curl grep whiptail"
   
 else
   Print_Style "I do not know what dependencies you need for this distro ($OS). Using defaults for Raspbian..." $RED
-  DEPENDENCIES="usbmuxd libimobiledevice6 curl grep"
+  DEPENDENCIES="usbmuxd libimobiledevice6 curl grep whiptail"
 fi
 
 Print_Style "Attempting to install dependencies." $BLUE
@@ -235,7 +235,7 @@ function MainMenu() {
         Print_Style "Success!"$ $GREEN
         whiptail --title "Using Checkra1n Autostart Service" --msgbox "This installation is now configured to autostart checkra1n on boot. \nThis means that your device must be in DFU mode manually in order to jailbreak. The autostart service may also interfere with other instances of checkra1n and cause them to fail. \nInstructions of how to put your device into DFU mode are here: \nhttps://www.reddit.com/r/jailbreak/wiki/dfumode \nPlug your device in, push some buttons, and checkra1n will do its work."
       fi
-      mainMenu
+      MainMenu
       ;;
       "Install Automatic webra1n")
       whiptail --yesno "Install autostart service? This requires you to use a web browser on a different device to jailbreak." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
@@ -252,19 +252,19 @@ function MainMenu() {
         NET_IP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1`
         whiptail --title "Using Checkra1n Autostart Service" --msgbox "This installation is now configured to autostart webra1n on boot. \nThis means that you must use a web browser and access this device's local IP via WiFi or Ethernet at port 8081. \nCurrent local URL: \n$NET_IP:8081/ \nNote: this will change if the device connects to a different network or loses connection."
       fi
-      mainMenu
+      MainMenu
     esac
     ;;
     "Credits")
     NET_IP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1`
     whiptail --title "Checkra1n GUI Installer" --msgbox "Checkra1n GUI Installer made by Randomblock1.\nThis project is open source! Check out https://github.com/Randomblock1/Checkra1n-Linux! \nFollow me on Twitter @randomblock1_! \nPlease report all bugs in the GitHub issue tracker and feel free to make pull requests! \nINFO: $OS $(uname -mo) \nVERSION: $VERSION \nLocal IP: $NET_IP" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-    mainMenu
+    MainMenu
     ;;
     "Update/Reinstall")
     whiptail --title "Checkra1n GUI Installer" --yesno "Update to latest version?" $((LINES/2)) $((COLUMNS*7/10))
     case $? in
       1)
-      mainMenu
+      MainMenu
       ;;
       0)
       ScriptUpdate
