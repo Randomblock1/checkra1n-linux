@@ -1,7 +1,7 @@
 #!/bin/bash
 # Checkra1n Easy Installer
 # GitHub Repository: https://github.com/Randomblock1/checkra1n-linux
-VERSION=1.2
+VERSION=2.0
 # Terminal colors
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
@@ -91,7 +91,7 @@ fi
 
 Print_Style "Attempting to install dependencies." $BLUE
 # TODO: detect if yum or others are needed
-apt install -y $DEPENDENCIES
+apt install -y $DEPENDENCIES > /dev/null
 }
 
 GetDependencies
@@ -127,8 +127,7 @@ Print_Style "Getting latest download..." $YELLOW
 
 ScriptUpdate () {
   export ONLINE_`curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 4 | grep "VERSION"`
-  if [ "$ONLINE_VERSION" -gt "$VERSION" ]
-  then
+  if [ "$ONLINE_VERSION" != "$VERSION" ]; then
   Print_Style "Updating..." $GREEN
       mkdir checkra1n-linux
       cd checkra1n-linux
