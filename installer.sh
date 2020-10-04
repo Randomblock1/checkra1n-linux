@@ -79,19 +79,30 @@ fi
 GetOS
 
 GetDependencies () {
-# Determine Linux distro dependencies
-
-if [[ "$OS" == *"Raspbian"* ]]; then
-  DEPENDENCIES="usbmuxd libimobiledevice6 curl grep whiptail"
-  
-else
-  Print_Style "I do not know what dependencies you need for this distro ($OS). Using defaults for Raspbian..." $RED
-  DEPENDENCIES="usbmuxd libimobiledevice6 curl grep whiptail"
+if ! command -v curl &> /dev/null; then
+  Print_Style "cURL could not be found, attempting to install" $RED
+  apt install -y curl
 fi
 
-Print_Style "Attempting to install dependencies." $BLUE
-# TODO: detect if yum or others are needed
-apt install -y $DEPENDENCIES > /dev/null
+if ! command -v grep &> /dev/null; then
+  Print_Style "grep could not be found, attempting to install" $RED
+  apt install -y grep
+fi
+
+if ! command -v whiptail &> /dev/null; then
+  Print_Style "whiptail could not be found, attempting to install" $RED
+  apt install -y whiptail
+fi
+
+if ! test -f "/usr/share/doc/libimobiledevice6/copyright"; then
+  Print_Style "libimobiledevice6 could not be found, attempting to install" $RED
+  apt install -y libimobiledevice6
+fi
+
+if ! test -f "/usr/sbin/usbmuxd"; then
+  Print_Style "usbmuxd could not be found, attempting to install" $RED
+  apt install -y usbmuxd
+fi
 }
 
 GetDependencies
