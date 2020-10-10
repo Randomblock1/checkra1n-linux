@@ -1,7 +1,7 @@
 #!/bin/bash
 # Checkra1n Easy Installer
 # GitHub Repository: https://github.com/Randomblock1/checkra1n-linux
-# shellcheck disable=SC2034
+# shellcheck disable=SC2034,SC1091
 VERSION=2.0
 # Terminal colors
 BLACK=$(tput setaf 0)
@@ -138,12 +138,12 @@ Print_Style "Getting latest download..." "$YELLOW"
 }
 
 ScriptUpdate () {
-  ONLINE_$(curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 4 | grep "VERSION")
+  ONLINE_"$(curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 4 | grep VERSION)"
   if [ "$ONLINE_VERSION" != "$VERSION" ]; then
   Print_Style "Updating..." "$GREEN"
       mkdir checkra1n-linux
       (
-      cd checkra1n-linux
+      cd checkra1n-linux || exit
       wget https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh
       chmod 755 ./*.sh
       mv -f ./* ..
@@ -235,8 +235,7 @@ function MainMenu() {
     "Install Automatic webra1n" "Starts webra1n on port 8081." 3>&1 1>&2 2>&3)
     case $CHOICE in
     "Install Automatic checkra1n")
-      whiptail --yesno "Install autostart service? This requires you to put your device into DFU mode manually it to work." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-      if [ "$?" = "0" ]; then
+      if whiptail --yesno "Install autostart service? This requires you to put your device into DFU mode manually it to work." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT)); then
         wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux.service
         chmod 644 checkra1n-linux.service
         mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
@@ -251,8 +250,7 @@ function MainMenu() {
       MainMenu
       ;;
       "Install Automatic webra1n")
-      whiptail --yesno "Install autostart service? This requires you to use a web browser on a different device to jailbreak." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-      if [ "$?" = "0" ]; then
+      if whiptail --yesno "Install autostart service? This requires you to use a web browser on a different device to jailbreak." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT)); then
         wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux-webra1n.service
         chmod 644 checkra1n-linux.service
         mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
