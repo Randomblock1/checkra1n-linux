@@ -324,6 +324,6 @@ function MainMenu() {
   esac
 }
 
-ScriptUpdate
+#ScriptUpdate
 Checkra1nChecker
 MainMenu
