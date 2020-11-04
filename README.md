@@ -20,4 +20,7 @@ Please put any issues in the GitHub Issue tracker and feel free to make pull req
 
 ## todo
 add support for non-Debian systems
+
 unprocursify
+
+fix startup scripts
