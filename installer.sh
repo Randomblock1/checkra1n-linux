@@ -128,14 +128,16 @@ Print_Style "Getting latest download..." "$YELLOW"
       Print_Style "x86_64 detected!" "$YELLOW"
       DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/x86_64\/.*\/checkra1n" -o)
 
-    elif [[ "$CPUArch" == *"x86"* ]]; then
+    elif [[ "$CPUArch" == *"x86"* || "$CPUArch" == *"i686"* ]]; then
       Print_Style "x86 detected!" "$YELLOW"
       DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/i486\/.*\/checkra1n" -o)
 
     else
       Print_Style "ERROR: Unknown/Unsupported architecture! Make sure your architecture is supported by checkra1n." "$RED"
-      DL_LINK=UNKNOWN
-      exit
+      Print_Style "Manually select architecture. Options are arm64, armv7, x86_64 and x86." $RED
+      read -p "Architecture: "
+      CPUArch="$REPLY"
+      GetDL
     fi
 }
 
