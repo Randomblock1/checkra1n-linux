@@ -221,6 +221,7 @@ GetDependencies
 GetDL
 GetJB
 Print_Style "Done! Marked as executable!" "$GREEN"
+echo "$CHECKRA1NVERSION" > ~/.cache/checkra1n-version
 Print_Style "All done!" "$BLINK"
 }
 
