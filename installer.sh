@@ -2,7 +2,7 @@
 # Checkra1n Easy Installer
 # GitHub Repository: https://github.com/Randomblock1/checkra1n-linux
 # shellcheck disable=SC2034,SC1091
-VERSION=2.1
+SCRIPT_VERSION=2.2
 # Terminal colors
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
@@ -134,8 +134,8 @@ Print_Style "Getting latest download..." "$YELLOW"
 
     else
       Print_Style "ERROR: Unknown/Unsupported architecture! Make sure your architecture is supported by checkra1n." "$RED"
-      Print_Style "Manually select architecture. Options are arm64, armv7, x86_64 and x86." $RED
-      read -p "Architecture: "
+      Print_Style "Manually select architecture. Options are arm64, armv7, x86_64 and x86." "$RED"
+      read -rp "Architecture: "
       CPUArch="$REPLY"
       GetDL
     fi
@@ -144,8 +144,7 @@ Print_Style "Getting latest download..." "$YELLOW"
 
 ScriptUpdate () {
   ONLINE_VERSION="$(curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 5 | tail -c 4)"
-  VERSION=$VERSION
-  if [ "$ONLINE_VERSION" != "$VERSION" ]; then
+  if [ "$ONLINE_VERSION" != "$SCRIPT_VERSION" ]; then
   Print_Style "Updating..." "$GREEN"
       mkdir checkra1n-linux
       (
@@ -311,7 +310,7 @@ function MainMenu() {
     Follow me on Twitter @randomblock1_! \n\
     Please report all bugs in the GitHub issue tracker and feel free to make pull requests! \n\
     INFO: $OS $(uname -mo) \n\
-    VERSION: $VERSION \n\
+    VERSION: $SCRIPT_VERSION \n\
     Local IP: $NET_IP" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
     MainMenu
     ;;
@@ -327,6 +326,6 @@ function MainMenu() {
   esac
 }
 
-#ScriptUpdate
+ScriptUpdate
 Checkra1nChecker
 MainMenu

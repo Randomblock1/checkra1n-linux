@@ -9,7 +9,7 @@ download without installing using bash:
 ```curl -s https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/installer.sh | sudo bash```
 (note: this won't install it to your machine)
 
-Optionally, instead of that long githubusercontent URL, you can use this: https://git.io/JTA0p. It's GitHub's own link shortener. It would look like this: ```curl -s https://git.io/JTA0p | sudo bash```
+Optionally, instead of that long githubusercontent URL, you can use this: [https://git.io/JTA0p](https://git.io/JTA0p). It's GitHub's own link shortener. It would look like this: ```curl -s https://git.io/JTA0p | sudo bash```
 
 ## how to use
 Use the "Install Repo" option if you are on x86\_64. Otherwise, use "Direct Download", which will install checkra1n to /usr/bin.
