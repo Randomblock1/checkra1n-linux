@@ -177,7 +177,7 @@ if test -f ~/.cache/checkra1n-version; then
   INSTALLEDVERSION=$(cat ~/.cache/checkra1n-version)
   if [ "$CHECKRA1NVERSION" != "$INSTALLEDVERSION" ]; then
     if (whiptail --title "Checkra1n Update" --yesno "An update for checkra1n is available ($(cat ~/.cache/checkra1n-version) to $CHECKRA1NVERSION). Update?" $((LINES/2)) $((COLUMNS*7/10))); then
-    UpdateCheckra1n
+    DirectDL
     fi
   else
     Print_Style "Checkra1n is up to date!" "$GREEN"
