@@ -38,13 +38,12 @@ fi
 
 # We need root.
 if [ "$EUID" -ne 0 ]; then
-  whiptail --msgbox "YOU AREN'T RUNNING AS ROOT! This script needs root, use sudo!" $((LINES/2)) $((COLUMNS*7/10)) --ok-button "Exit"
+  whiptail --msgbox "YOU AREN'T RUNNING AS ROOT! This script needs root, use sudo!" $((LINES*3/4)) $((COLUMNS*7/10)) --ok-button "Exit"
   Print_Style "ERROR: You need to run this as root, use sudo!" "$RED"
   exit
 fi
 
-# Get OS info
-GetOS () {
+
 # Check system architecture
 CPUArch=$(uname -m)
 Print_Style "System Architecture: $CPUArch" "$YELLOW"
@@ -80,9 +79,7 @@ else
     OS=$(uname -s)
     VER=$(uname -r)
 fi
-}
 
-GetOS
 
 # Checkra1n requires some libraries to work properly.
 if ! command -v curl &> /dev/null; then
@@ -146,18 +143,18 @@ Print_Style "Getting latest download..." "$YELLOW"
 
 # Automatic script self-update logic
 ScriptUpdate () {
-  ONLINE_VERSION="$(curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 5 | tail -c 4)"
-  if (( $(echo "$ONLINE_VERSION > $SCRIPT_VERSION" | bc -l) )); then
+ONLINE_VERSION="$(curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 5 | tail -c 4)"
+if (( $(echo "$ONLINE_VERSION > $SCRIPT_VERSION" | bc -l) )); then
   Print_Style "Script needs to be updated! Updating..." "$GREEN"
-      wget -q https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh -O installer.sh
-      chmod 755 installer.sh
-      Print_Style "Completed!" "$GREEN"
-      whiptail --title "Script Updated" --msgbox "This script has been automatically updated to version $ONLINE_VERSION!" $((LINES*3/4)) $((COLUMNS*7/10))
-     ./installer.sh
-     exit
-  else
+    wget -q https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh -O installer.sh
+    chmod 755 installer.sh
+    Print_Style "Completed!" "$GREEN"
+    whiptail --title "Script Updated" --msgbox "This script has been automatically updated to version $ONLINE_VERSION!" $((LINES*3/4)) $((COLUMNS*7/10))
+    ./installer.sh
+    exit
+else
   Print_Style "Script is already up to date!" "$GREEN"
-  fi
+fi
 }
 
 # Is our checkra1n up to date?
@@ -169,12 +166,12 @@ if test -f ~/.cache/checkra1n-version; then
   INSTALLEDVERSION=$(cat ~/.cache/checkra1n-version)
   if [ "$CHECKRA1NVERSION" != "$INSTALLEDVERSION" ]; then
     if (whiptail --title "Checkra1n Update" --yesno "An update for checkra1n is available ($(cat ~/.cache/checkra1n-version) to $CHECKRA1NVERSION). Update?" $((LINES*3/4)) $((COLUMNS*7/10))); then
-    DirectDL
+      DirectDL
     fi
   else
     Print_Style "Checkra1n is up to date!" "$GREEN"
   fi
-else
+  else
   # If checkra1n exists, assume we are up-to-date. Otherwise, let it autoupdate.
   if test -f /usr/bin/checkra1n; then
     echo "$CHECKRA1NVERSION" > ~/.cache/checkra1n-version
@@ -211,14 +208,14 @@ fi
 
 # Called when we want to directly download checkra1n.
 DirectDL () {
-GetOS
-GetDL
-Print_Style "Getting checkra1n..." "$GREEN"
-curl "$DL_LINK" -o /usr/bin/checkra1n
-chmod 755 /usr/bin/checkra1n
-Print_Style "Done! Marked as executable!" "$GREEN"
-echo "$CHECKRA1NVERSION" > ~/.cache/checkra1n-version
-Print_Style "All done!" "$BLINK"
+  GetOS
+  GetDL
+  Print_Style "Getting checkra1n..." "$GREEN"
+  curl "$DL_LINK" -o /usr/bin/checkra1n
+  chmod 755 /usr/bin/checkra1n
+  Print_Style "Done! Marked as executable!" "$GREEN"
+  echo "$CHECKRA1NVERSION" > ~/.cache/checkra1n-version
+  Print_Style "All done!" "$BLINK"
 }
 
 # Check if we can use the repo; otherwise, exit.
@@ -240,15 +237,15 @@ echo "All done!"
 
 # Print credits.
 GetCredits () {
-NET_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
-whiptail --title "Checkra1n GUI Installer" --msgbox "Checkra1n GUI Installer made by Randomblock1.\n\
-This project is open source! Check out https://github.com/Randomblock1/Checkra1n-Linux! \n\
-Follow me on Twitter @randomblock1_! \n\
-Please report all bugs in the GitHub issue tracker and feel free to make pull requests! \n\
-INFO: $OS $(uname -mo) \n\
-VERSION: $SCRIPT_VERSION \n\
-Local IP: $NET_IP" $((LINES*3/4)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-MainMenu
+  NET_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
+  whiptail --title "Checkra1n GUI Installer" --msgbox "Checkra1n GUI Installer made by Randomblock1.\n\
+  This project is open source! Check out https://github.com/Randomblock1/Checkra1n-Linux! \n\
+  Follow me on Twitter @randomblock1_! \n\
+  Please report all bugs in the GitHub issue tracker and feel free to make pull requests! \n\
+  INFO: $OS $(uname -mo) \n\
+  VERSION: $SCRIPT_VERSION \n\
+  Local IP: $NET_IP" $((LINES*3/4)) $((COLUMNS*7/10)) $((LISTHEIGHT))
+  MainMenu
 }
 
 # Main menu. Uses whiptail.
@@ -283,7 +280,7 @@ function MainMenu() {
       0)
       SCRIPT_VERSION=0.0
       ScriptUpdate
-   esac
+    esac
   esac
 }
 
