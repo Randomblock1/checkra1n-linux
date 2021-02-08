@@ -81,31 +81,23 @@ else
 fi
 
 
-# Checkra1n requires some libraries to work properly.
-if ! command -v curl &> /dev/null; then
-  Print_Style "cURL could not be found, attempting to install" "$RED"
-  apt install -y curl
-fi
+# This script and Checkra1n requires some libraries to work properly.
+CheckDep() {
+  if dpkg -s "$1" &> /dev/null; then
+    Print_Style "Dependency check: $1 installed." "$GREEN"
+  else
+    Print_Style "Dependency check: $1 NOT installed. Installing..." "$RED"
+    apt install -y "$1" -qq > /dev/null 2>/dev/null || (Print_Style "WARNING: $1 failed to install." "$RED"; exit)
+    Print_Style "$1 installed." "$GREEN"
+  fi
+}
 
-if ! command -v grep &> /dev/null; then
-  Print_Style "grep could not be found, attempting to install" "$RED"
-  apt install -y grep
-fi
+CheckDep curl
+CheckDep grep
+CheckDep whiptail
+CheckDep libimobiledevice6
+CheckDep usbmuxd
 
-if ! command -v whiptail &> /dev/null; then
-  Print_Style "whiptail could not be found, attempting to install" "$RED"
-  apt install -y whiptail
-fi
-
-if ! test -f "/usr/share/doc/libimobiledevice6/copyright"; then
-  Print_Style "libimobiledevice6 could not be found, attempting to install" "$RED"
-  apt install -y libimobiledevice6
-fi
-
-if ! test -f "/usr/sbin/usbmuxd"; then
-  Print_Style "usbmuxd could not be found, attempting to install" "$RED"
-  apt install -y usbmuxd
-fi
 
 # Find latest checkra1n version (for autoupdate).
 CHECKRA1NVERSION=$(curl https://checkra.in/ -s | grep "checkra1n .\..*\.." -oE | grep ".\..*\.." -oE)
