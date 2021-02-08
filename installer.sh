@@ -85,7 +85,6 @@ fi
 GetOS
 
 # Checkra1n requires some libraries to work properly.
-GetDependencies () {
 if ! command -v curl &> /dev/null; then
   Print_Style "cURL could not be found, attempting to install" "$RED"
   apt install -y curl
@@ -110,32 +109,31 @@ if ! test -f "/usr/sbin/usbmuxd"; then
   Print_Style "usbmuxd could not be found, attempting to install" "$RED"
   apt install -y usbmuxd
 fi
-}
-
-GetDependencies
-
 
 # Find latest checkra1n version (for autoupdate).
 CHECKRA1NVERSION=$(curl https://checkra.in/ -s | grep "checkra1n .\..*\.." -oE | grep ".\..*\.." -oE)
 
 # Automatically find latest checkra1n for correct architecture.
 GetDL () {
+  FindDL() {
+    DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/$1\/.*\/checkra1n" -o)
+  }
 Print_Style "Getting latest download..." "$YELLOW"
     if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
       Print_Style "ARM64 detected!" "$YELLOW"
-      DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/arm64\/.*\/checkra1n" -o)
+      FindDL arm64
 
     elif [[ "$CPUArch" == *"armhf"* || "$CPUArch" == *"armv"* ]]; then
       Print_Style "ARM detected!" "$YELLOW"
-      DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/arm\/.*\/checkra1n" -o)
+      FindDL arm
 
     elif [[ "$CPUArch" == *"x86_64"* ]]; then
       Print_Style "x86_64 detected!" "$YELLOW"
-      DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/x86_64\/.*\/checkra1n" -o)
+      FindDL x86_64
 
     elif [[ "$CPUArch" == *"x86"* || "$CPUArch" == *"i686"* ]]; then
       Print_Style "x86 detected!" "$YELLOW"
-      DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/i486\/.*\/checkra1n" -o)
+      FindDL i486
 
     else
       Print_Style "ERROR: Unknown/Unsupported architecture! Make sure your architecture is supported by checkra1n." "$RED"
@@ -160,13 +158,6 @@ ScriptUpdate () {
   else
   Print_Style "Script is already up to date!" "$GREEN"
   fi
-}
-
-# Simple download function.
-GetJB () {
-  Print_Style "Getting checkra1n..." "$GREEN"
-  curl "$DL_LINK" -o /usr/bin/checkra1n
-  chmod 755 /usr/bin/checkra1n
 }
 
 # Is our checkra1n up to date?
@@ -221,9 +212,10 @@ fi
 # Called when we want to directly download checkra1n.
 DirectDL () {
 GetOS
-GetDependencies
 GetDL
-GetJB
+Print_Style "Getting checkra1n..." "$GREEN"
+curl "$DL_LINK" -o /usr/bin/checkra1n
+chmod 755 /usr/bin/checkra1n
 Print_Style "Done! Marked as executable!" "$GREEN"
 echo "$CHECKRA1NVERSION" > ~/.cache/checkra1n-version
 Print_Style "All done!" "$BLINK"
@@ -283,12 +275,13 @@ function MainMenu() {
     GetCredits
     ;;
     "Update/Reinstall")
-    whiptail --title "Checkra1n GUI Installer" --yesno "Update to latest version?" $((LINES*3/4)) $((COLUMNS*7/10))
+    whiptail --title "Checkra1n GUI Installer" --yesno "Force update to latest version?" $((LINES*3/4)) $((COLUMNS*7/10))
     case $? in
       1)
       MainMenu
       ;;
       0)
+      SCRIPT_VERSION=0.0
       ScriptUpdate
    esac
   esac
