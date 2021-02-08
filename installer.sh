@@ -149,19 +149,14 @@ Print_Style "Getting latest download..." "$YELLOW"
 # Automatic script self-update logic
 ScriptUpdate () {
   ONLINE_VERSION="$(curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 5 | tail -c 4)"
-  if [ "$ONLINE_VERSION" != "$SCRIPT_VERSION" ]; then
-  Print_Style "Updating..." "$GREEN"
-      mkdir checkra1n-linux
-      (
-      cd checkra1n-linux || exit
-      wget https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh
-      chmod 755 ./*.sh
-      mv -f ./* ..
-      )
-      rm -R checkra1n-linux
+  if (( $(echo "$ONLINE_VERSION > $SCRIPT_VERSION" | bc -l) )); then
+  Print_Style "Script needs to be updated! Updating..." "$GREEN"
+      wget -q https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh -O installer.sh
+      chmod 755 installer.sh
       Print_Style "Completed!" "$GREEN"
       whiptail --title "Script Updated" --msgbox "This script has been automatically updated to version $ONLINE_VERSION!" $((LINES*3/4)) $((COLUMNS*7/10))
      ./installer.sh
+     exit
   else
   Print_Style "Script is already up to date!" "$GREEN"
   fi
