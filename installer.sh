@@ -1,9 +1,9 @@
 #!/bin/bash
-# Checkra1n Easy Installer
+# Checkra1n Installer for All Architectures
 # GitHub Repository: https://github.com/Randomblock1/checkra1n-linux
 # shellcheck disable=SC2034,SC1091
-SCRIPT_VERSION=2.2
-# Terminal colors
+SCRIPT_VERSION=2.3
+# Set terminal colors
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
@@ -19,34 +19,38 @@ BLINK=$(tput blink)
 REVERSE=$(tput smso)
 UNDERLINE=$(tput smul)
 
+# Set whiptail dialog size
 LINES=$(tput lines)
 COLUMNS=$(tput cols)
-LISTHEIGHT=$((LINES/3))
+LISTHEIGHT=5
 
 # Prints a line with color using terminal codes
 Print_Style () {
   printf "%s\n" "${2}$1${NORMAL}"
 }
 
-if [ "$BASH_VERSION" = '' ]; then
-  whiptail --msgbox "ERROR: this script must be run in bash!" 20 30 --ok-button "Exit"
-  echo "ERROR: this script must be run in bash!"
+# This is a bash script. Can also run in zsh.
+if [[ "$BASH_VERSION" == '' && "$ZSH_VERSION" == '' ]]; then
+  whiptail --msgbox "ERROR: this script must be run in bash/zsh!" 20 30 --ok-button "Exit"
+  echo "ERROR: this script must be run in bash/zsh!"
   exit
 fi
 
+# We need root.
 if [ "$EUID" -ne 0 ]; then
   whiptail --msgbox "YOU AREN'T RUNNING AS ROOT! This script needs root, use sudo!" $((LINES/2)) $((COLUMNS*7/10)) --ok-button "Exit"
   Print_Style "ERROR: You need to run this as root, use sudo!" "$RED"
   exit
 fi
 
+# Get OS info
 GetOS () {
 # Check system architecture
 CPUArch=$(uname -m)
 Print_Style "System Architecture: $CPUArch" "$YELLOW"
 
 # Get Linux distribution
-# Copied from Stack Overflow
+# https://unix.stackexchange.com/a/6348
 if [ -f /etc/os-release ]; then
     # freedesktop.org and systemd
     . /etc/os-release
@@ -80,6 +84,7 @@ fi
 
 GetOS
 
+# Checkra1n requires some libraries to work properly.
 GetDependencies () {
 if ! command -v curl &> /dev/null; then
   Print_Style "cURL could not be found, attempting to install" "$RED"
@@ -110,12 +115,12 @@ fi
 GetDependencies
 
 
-# get latest checkra1n version number
+# Find latest checkra1n version (for autoupdate).
 CHECKRA1NVERSION=$(curl https://checkra.in/ -s | grep "checkra1n .\..*\.." -oE | grep ".\..*\.." -oE)
 
+# Automatically find latest checkra1n for correct architecture.
 GetDL () {
 Print_Style "Getting latest download..." "$YELLOW"
-    # Choose correct download link
     if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
       Print_Style "ARM64 detected!" "$YELLOW"
       DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/arm64\/.*\/checkra1n" -o)
@@ -141,7 +146,7 @@ Print_Style "Getting latest download..." "$YELLOW"
     fi
 }
 
-
+# Automatic script self-update logic
 ScriptUpdate () {
   ONLINE_VERSION="$(curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 5 | tail -c 4)"
   if [ "$ONLINE_VERSION" != "$SCRIPT_VERSION" ]; then
@@ -155,19 +160,21 @@ ScriptUpdate () {
       )
       rm -R checkra1n-linux
       Print_Style "Completed!" "$GREEN"
-      whiptail --title "Script Updated" --msgbox "This script has been automatically updated to version $ONLINE_VERSION!" $((LINES/2)) $((COLUMNS*7/10))
+      whiptail --title "Script Updated" --msgbox "This script has been automatically updated to version $ONLINE_VERSION!" $((LINES*3/4)) $((COLUMNS*7/10))
      ./installer.sh
   else
   Print_Style "Script is already up to date!" "$GREEN"
   fi
 }
 
+# Simple download function.
 GetJB () {
   Print_Style "Getting checkra1n..." "$GREEN"
   curl "$DL_LINK" -o /usr/bin/checkra1n
   chmod 755 /usr/bin/checkra1n
 }
 
+# Is our checkra1n up to date?
 Checkra1nChecker () {
 if ! test "$HOME/.cache"; then
   mkdir ~/.cache
@@ -175,13 +182,14 @@ fi
 if test -f ~/.cache/checkra1n-version; then
   INSTALLEDVERSION=$(cat ~/.cache/checkra1n-version)
   if [ "$CHECKRA1NVERSION" != "$INSTALLEDVERSION" ]; then
-    if (whiptail --title "Checkra1n Update" --yesno "An update for checkra1n is available ($(cat ~/.cache/checkra1n-version) to $CHECKRA1NVERSION). Update?" $((LINES/2)) $((COLUMNS*7/10))); then
+    if (whiptail --title "Checkra1n Update" --yesno "An update for checkra1n is available ($(cat ~/.cache/checkra1n-version) to $CHECKRA1NVERSION). Update?" $((LINES*3/4)) $((COLUMNS*7/10))); then
     DirectDL
     fi
   else
     Print_Style "Checkra1n is up to date!" "$GREEN"
   fi
 else
+  # If checkra1n exists, assume we are up-to-date. Otherwise, let it autoupdate.
   if test -f /usr/bin/checkra1n; then
     echo "$CHECKRA1NVERSION" > ~/.cache/checkra1n-version
   else
@@ -190,11 +198,12 @@ else
 fi
 }
 
+# Installs Procursus bootstrap interactively.
 Procursify () {
 if (whiptail --title "Procursify" --yesno "Would you like to install the Procursus/odysseyra1n bootstrap?\n\
 This will allow you to use libhooker, a replacement for Substrate, and the Procursus repo tools.\n\
 Procursus tools are more up-to-date than other repos.\n\
-Libhooker has been reported to be slightly more stable and efficient than Substrate, but no real testing has been done." $((LINES/2)) $((COLUMNS*7/10))); then
+Libhooker has been reported to be slightly more stable and efficient than Substrate, but no real testing has been done." $((LINES*3/4)) $((COLUMNS*7/10))); then
   if (whiptail --title "Procursify" --yes-button "Continue" --no-button "Cancel" --yesno "It's time to prepare your device.\n\
   Please do all of the following to continue.\n\
   1. Backup your tweaks with applist, batchomatic, or backupaz3.\n\
@@ -209,11 +218,12 @@ Libhooker has been reported to be slightly more stable and efficient than Substr
     iproxy 4444 44 >> /dev/null 2>/dev/null &
     echo "Default password is: alpine"
     ssh -p4444 -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" root@127.0.0.1 "apt update && apt install org.coolstar.libhooker -y && /etc/rc.d/libhooker && sbreload"
-    whiptail --title "Procursify" --msgbox "Success! Enjoy your libhooker." $((LINES/2)) $((COLUMNS*7/10))
+    whiptail --title "Procursify" --msgbox "Success! Enjoy your libhooker." $((LINES*3/4)) $((COLUMNS*7/10))
   fi
 fi
 }
 
+# Called when we want to directly download checkra1n.
 DirectDL () {
 GetOS
 GetDependencies
@@ -224,6 +234,7 @@ echo "$CHECKRA1NVERSION" > ~/.cache/checkra1n-version
 Print_Style "All done!" "$BLINK"
 }
 
+# Check if we can use the repo; otherwise, exit.
 InstallRepo () {
 if [[ "$CPUArch" == *"x86_64"* ]]; then
   Print_Style "x86_64 detected!" "$GREEN"
@@ -240,10 +251,24 @@ sudo apt install checkra1n
 echo "All done!"
 }
 
+# Print credits.
+GetCredits () {
+NET_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
+whiptail --title "Checkra1n GUI Installer" --msgbox "Checkra1n GUI Installer made by Randomblock1.\n\
+This project is open source! Check out https://github.com/Randomblock1/Checkra1n-Linux! \n\
+Follow me on Twitter @randomblock1_! \n\
+Please report all bugs in the GitHub issue tracker and feel free to make pull requests! \n\
+INFO: $OS $(uname -mo) \n\
+VERSION: $SCRIPT_VERSION \n\
+Local IP: $NET_IP" $((LINES*3/4)) $((COLUMNS*7/10)) $((LISTHEIGHT))
+MainMenu
+}
+
+# Main menu. Uses whiptail.
 function MainMenu() {
   CHOICE=$(whiptail \
   --title "Checkra1n GUI Installer on $(uname -m)" \
-  --menu "Choose an option" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT)) \
+  --menu "Choose an option" $((LINES*3/4)) $((COLUMNS*7/10)) $((LISTHEIGHT)) \
     "Install Repo" "Install the repo. x86_64 ONLY!" \
     "Direct Download" "Use on any architecture." \
     "Procursify" "Install Procursus bootstrap." \
@@ -259,63 +284,11 @@ function MainMenu() {
     "Procursify")
     Procursify
     ;;
-    "Install Autostart Service")
-    CHOICE=$(whiptail \
-  --title "Checkra1n Service Installer on $(uname -m)" \
-  --menu "Choose ONE OR THE OTHER. Having them both working is not possible since they interfere with each other (I think?)." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT)) \
-    "Install Automatic checkra1n" "Automatically jailbreaks DFU devices." \
-    "Install Automatic webra1n" "Starts webra1n on port 8081." 3>&1 1>&2 2>&3)
-    case $CHOICE in
-    "Install Automatic checkra1n")
-      if whiptail --yesno "Install autostart service? This requires you to put your device into DFU mode manually it to work." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT)); then
-        wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux.service
-        chmod 644 checkra1n-linux.service
-        mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
-        Print_Style "Moved service to /lib/systemd/system/" "$GREEN"
-        Print_Style "Enabling service..." "$GREEN"
-        systemctl daemon-reload
-        systemctl enable checkra1n-linux
-        systemctl restart checkra1n-linux
-        Print_Style "Success!"$ "$GREEN"
-        whiptail --title "Using Checkra1n Autostart Service" --msgbox "This installation is now configured to autostart checkra1n on boot. \n\
-        This means that your device must be in DFU mode manually in order to jailbreak. The autostart service may also interfere with other instances of checkra1n and cause them to fail. \n\
-        Instructions of how to put your device into DFU mode are here: \nhttps://www.reddit.com/r/jailbreak/wiki/dfumode \n\
-        Plug your device in, push some buttons, and checkra1n will do its work." $((LINES/2)) $((COLUMNS*7/10))
-      fi
-      MainMenu
-      ;;
-      "Install Automatic webra1n")
-      if whiptail --yesno "Install autostart service? This requires you to use a web browser on a different device to jailbreak." $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT)); then
-        wget -O checkra1n-linux.service https://raw.githubusercontent.com/Randomblock1/Checkra1n-Linux/master/checkra1n-linux-webra1n.service
-        chmod 644 checkra1n-linux.service
-        mv checkra1n-linux.service /lib/systemd/system/checkra1n-linux.service
-        Print_Style "Moved service to /lib/systemd/system/" "$GREEN"
-        Print_Style "Enabling service..." "$GREEN"
-        systemctl daemon-reload
-        systemctl enable checkra1n-linux
-        systemctl restart checkra1n-linux
-        Print_Style "Success!"$ "$GREEN"
-        NET_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
-        whiptail --title "Using Checkra1n Autostart Service" --msgbox "This installation is now configured to autostart webra1n on boot. \n\
-        This means that you must use a web browser and access this device's local IP via WiFi or Ethernet at port 8081. \n\
-        Current local URL: \n$NET_IP:8081/ \nNote: this will change if the device connects to a different network or loses connection."
-      fi
-      MainMenu
-    esac
-    ;;
     "Credits")
-    NET_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
-    whiptail --title "Checkra1n GUI Installer" --msgbox "Checkra1n GUI Installer made by Randomblock1.\n\
-    This project is open source! Check out https://github.com/Randomblock1/Checkra1n-Linux! \n\
-    Follow me on Twitter @randomblock1_! \n\
-    Please report all bugs in the GitHub issue tracker and feel free to make pull requests! \n\
-    INFO: $OS $(uname -mo) \n\
-    VERSION: $SCRIPT_VERSION \n\
-    Local IP: $NET_IP" $((LINES/2)) $((COLUMNS*7/10)) $((LISTHEIGHT))
-    MainMenu
+    GetCredits
     ;;
     "Update/Reinstall")
-    whiptail --title "Checkra1n GUI Installer" --yesno "Update to latest version?" $((LINES/2)) $((COLUMNS*7/10))
+    whiptail --title "Checkra1n GUI Installer" --yesno "Update to latest version?" $((LINES*3/4)) $((COLUMNS*7/10))
     case $? in
       1)
       MainMenu
@@ -326,6 +299,7 @@ function MainMenu() {
   esac
 }
 
+# Main function. Check script, then checkra1n, then enter the main menu.
 ScriptUpdate
 Checkra1nChecker
 MainMenu
