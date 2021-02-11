@@ -22,7 +22,7 @@ UNDERLINE=$(tput smul)
 # Set whiptail dialog size
 LINES=$(tput lines)
 COLUMNS=$(tput cols)
-LISTHEIGHT=5
+LISTHEIGHT=6
 
 # Prints a line with color using terminal codes
 Print_Style () {
@@ -81,7 +81,7 @@ else
 fi
 
 
-# This script and Checkra1n requires some libraries to work properly.
+# This script and Checkra1n requires some things to work properly.
 CheckDep() {
   if dpkg -s "$1" &> /dev/null; then
     Print_Style "Dependency check: $1 installed." "$GREEN"
@@ -96,8 +96,14 @@ CheckDep curl
 CheckDep grep
 CheckDep whiptail
 CheckDep libimobiledevice6
+CheckDep libimobiledevice-utils
 CheckDep usbmuxd
 
+# We need Internet
+if ! curl -sI http://google.com > /dev/null; then
+  Print_Style "No internet connection!" "$RED"
+  exit
+fi
 
 # Find latest checkra1n version (for autoupdate).
 CHECKRA1NVERSION=$(curl https://checkra.in/ -s | grep "checkra1n .\..*\.." -oE | grep ".\..*\.." -oE)
@@ -227,9 +233,35 @@ sudo apt install checkra1n
 echo "All done!"
 }
 
+# Save blobs using 1Conan TSSSaver API
+TssSaver () {
+  Print_Style "TSS Saver Activated!" "$PURPLE"
+  Print_Style "Getting info about your device..." "$PURPLE"
+  if ! ideviceinfo -s -k ProductVersion; then
+    Print_Style "No device detected!" "$RED"
+    Print_Style "Check that your device is plugged in!" "$RED"
+    exit
+  fi
+  device="$(ideviceinfo -s -k ProductType)"
+  board="$(ideviceinfo -s -k HardwareModel)"
+  ecid="$(ideviceinfo -s -k UniqueChipID)"
+  Print_Style "Device: $device" "$PURPLE"
+  Print_Style "Board: $board" "$PURPLE"
+  Print_Style "ECID (decimal): $ecid" "$PURPLE"
+  Print_Style "Requesting https://tsssaver.1conan.com to save our blobs..." "$WHITE"
+  request="{\"boardConfig\":\"$board\",\"ecid\":\"$ecid\",\"deviceIdentifier\":\"$device\"}"
+  sleep 1
+  curl -X POST -d $request https://tsssaver.1conan.com/v2/api/save.php || exit
+  Print_Style "Success! View your saved blobs at https://tsssaver.1conan.com/shsh/$ecid" "$GREEN"
+}
+
 # Print credits.
 GetCredits () {
-  NET_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
+  if dpkg -s "net-tools" &> /dev/null; then
+    NET_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
+  else
+    NET_IP=N/A
+  fi
   whiptail --title "Checkra1n GUI Installer" --msgbox "Checkra1n GUI Installer made by Randomblock1.\n\
   This project is open source! Check out https://github.com/Randomblock1/Checkra1n-Linux! \n\
   Follow me on Twitter @randomblock1_! \n\
@@ -248,6 +280,7 @@ function MainMenu() {
     "Install Repo" "Install the repo. x86_64 ONLY!" \
     "Direct Download" "Use on any architecture." \
     "Procursify" "Install Procursus bootstrap." \
+    "Save Blobs" "Save SHSH blobs for up/downgrading." \
     "Credits" "This tool is open-source!" \
     "Update/Reinstall" "Update this tool." 3>&1 1>&2 2>&3)
   case $CHOICE in
@@ -259,6 +292,9 @@ function MainMenu() {
     ;;
     "Procursify")
     Procursify
+    ;;
+    "Save Blobs")
+    TssSaver
     ;;
     "Credits")
     GetCredits
