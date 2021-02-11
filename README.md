@@ -11,9 +11,18 @@ download without installing using bash:
 
 
 ## how to use
-Use the "Install Repo" option if you are on x86\_64. Otherwise, use "Direct Download", which will install checkra1n to /usr/bin.
-"Procursify" will install the Procursus bootstrap to your device. Learn more about Procursus [here](https://github.com/ProcursusTeam/Procursus). TLDR: Replaces Substrate with libhooker (supposedly better) and uses the Procursus repo for more up-to-date programs. Also, you get Sileo, in addition to Cydia.
-"Credits" is self explanatory, and "Update" uses curl to get the latest version of this tool.
+- "Install Repo"
+  - This will install the checkra1n APT repo, but only if you are using x86\_64.
+- "Direct Download"
+  - Installs checkra1n to /usr/bin for all devices, even non x86\_64.
+- "Procursify"
+  - Installs the Procursus bootstrap to your device. Learn more about Procursus [here](https://github.com/ProcursusTeam/Procursus). TLDR: Replaces Substrate with libhooker (supposedly better) and uses the Procursus repo for more up-to-date programs. Also, you get Sileo, in addition to Cydia.
+- “Save Blobs”
+  - Saves signed SHSH blobs so you can upgrade/downgrade to unsigned iOS versions if you have the right blobs.
+- "Credits"
+  - Is self explanatory
+- "Update"
+  - Uses curl to get the latest version of this tool.
 
 If you are not on a Debian based system, you may need to install dependencies manually. Just Google any errors and see if it means you're missing something.
 

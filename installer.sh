@@ -1,8 +1,8 @@
 #!/bin/bash
 # Checkra1n Installer for All Architectures
 # GitHub Repository: https://github.com/Randomblock1/checkra1n-linux
-# shellcheck disable=SC2034,SC1091
-SCRIPT_VERSION=2.3
+# shellcheck disable=SC2034,SC1091,SC2089
+SCRIPT_VERSION=3.0
 # Set terminal colors
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
@@ -251,7 +251,7 @@ TssSaver () {
   Print_Style "Requesting https://tsssaver.1conan.com to save our blobs..." "$WHITE"
   request="{\"boardConfig\":\"$board\",\"ecid\":\"$ecid\",\"deviceIdentifier\":\"$device\"}"
   sleep 1
-  curl -X POST -d $request https://tsssaver.1conan.com/v2/api/save.php || exit
+  curl -X POST -d "$request" https://tsssaver.1conan.com/v2/api/save.php || exit
   Print_Style "Success! View your saved blobs at https://tsssaver.1conan.com/shsh/$ecid" "$GREEN"
 }
 
