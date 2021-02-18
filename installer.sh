@@ -253,7 +253,7 @@ TssSaver () {
   sleep 1
   curl -X POST -d "$request" https://tsssaver.1conan.com/v2/api/save.php || exit
   Print_Style "Success! View your saved blobs at https://tsssaver.1conan.com/shsh/$ecid" "$GREEN"
-  Print_Style "If you want to save blobs without this tool, just run this command:" "$GREEN"
+  Print_Style "If you want to save blobs for your device without this tool, just run this command:" "$GREEN"
   Print_Style "curl -X POST -d $request https://tsssaver.1conan.com/v2/api/save.php" "$WHITE"
 }
 
