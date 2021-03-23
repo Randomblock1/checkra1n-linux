@@ -2,7 +2,7 @@
 # Checkra1n Installer for All Architectures
 # GitHub Repository: https://github.com/Randomblock1/checkra1n-linux
 # shellcheck disable=SC2034,SC1091,SC2089
-SCRIPT_VERSION=3.0
+SCRIPT_VERSION=3.1
 # Set terminal colors
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
@@ -83,21 +83,30 @@ fi
 
 # This script and Checkra1n requires some things to work properly.
 CheckDep() {
-  if dpkg -s "$1" &> /dev/null; then
+  if dpkg -s "$1" &> /dev/null || which "$1" || sudo -u "$SUDO_USER" brew list "$1"; then
     Print_Style "Dependency check: $1 installed." "$GREEN"
   else
     Print_Style "Dependency check: $1 NOT installed. Installing..." "$RED"
-    apt install -y "$1" -qq > /dev/null 2>/dev/null || (Print_Style "WARNING: $1 failed to install." "$RED"; exit)
+    if [ "$OS" != "Darwin" ]; then
+      apt install -y "$1" -qq > /dev/null 2>/dev/null || (Print_Style "WARNING: $1 failed to install." "$RED"; exit)
+    else
+      sudo -u "$SUDO_USER" brew install "$1" -q > /dev/null 2>/dev/null || (Print_Style "WARNING: $1 failed to install." "$RED"; exit)
+    fi
     Print_Style "$1 installed." "$GREEN"
   fi
 }
 
 CheckDep curl
 CheckDep grep
-CheckDep whiptail
-CheckDep libimobiledevice6
-CheckDep libimobiledevice-utils
 CheckDep usbmuxd
+if [ "$OS" != "Darwin" ]; then
+  CheckDep whiptail
+  CheckDep libimobiledevice6
+  CheckDep libimobiledevice-utils
+else
+  CheckDep newt
+  CheckDep libimobiledevice
+fi
 
 # We need Internet
 if ! curl -sI http://google.com > /dev/null; then
@@ -184,23 +193,13 @@ Procursify () {
 if (whiptail --title "Procursify" --yesno "Would you like to install the Procursus/odysseyra1n bootstrap?\n\
 This will allow you to use libhooker, a replacement for Substrate, and the Procursus repo tools.\n\
 Procursus tools are more up-to-date than other repos.\n\
-Libhooker has been reported to be slightly more stable and efficient than Substrate, but no real testing has been done." $((LINES*3/4)) $((COLUMNS*7/10))); then
-  if (whiptail --title "Procursify" --yes-button "Continue" --no-button "Cancel" --yesno "It's time to prepare your device.\n\
-  Please do all of the following to continue.\n\
-  1. Backup your tweaks with applist, batchomatic, or backupaz3.\n\
-  2. Restore RootFS\n\
-  3. Jailbreak but DO NOT OPEN THE CHECKRA1N LOADER ON YOUR device\n\
-  4. Continue here" "$LINES" "$COLUMNS"); then
-    if ! command -v iproxy &> /dev/null; then
-      Print_Style "iproxy could not be found, attempting to install" "$RED"
-      apt install -y libusbmuxd-tools
-    fi
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/coolstar/Odyssey-bootstrap/master/procursus-deploy-linux-macos.sh)"
-    iproxy 4444 44 >> /dev/null 2>/dev/null &
-    echo "Default password is: alpine"
-    ssh -p4444 -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" root@127.0.0.1 "apt update && apt install org.coolstar.libhooker -y && /etc/rc.d/libhooker && sbreload"
-    whiptail --title "Procursify" --msgbox "Success! Enjoy your libhooker." $((LINES*3/4)) $((COLUMNS*7/10))
+Libhooker is slightly more stable and efficient than Substrate and Substitute." $((LINES*3/4)) $((COLUMNS*7/10))); then
+  if ! command -v iproxy &> /dev/null; then
+    Print_Style "iproxy could not be found, attempting to install" "$RED"
+    apt install -y libusbmuxd-tools
   fi
+  sudo -u "$SUDO_USER" /bin/bash -c "./procursify.sh"
+  whiptail --title "Procursify" --msgbox "Success! Enjoy your libhooker." $((LINES*3/4)) $((COLUMNS*7/10))
 fi
 }
 
