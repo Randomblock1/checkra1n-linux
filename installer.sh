@@ -153,7 +153,7 @@ ScriptUpdate () {
 ONLINE_VERSION="$(curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | head -n 5 | tail -c 4)"
 if (( $(echo "$ONLINE_VERSION > $SCRIPT_VERSION" | bc -l) )); then
   Print_Style "Script needs to be updated! Updating..." "$GREEN"
-    wget -q https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh -O installer.sh
+    sudo -u "$SUDO_USER" wget -q https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh -O installer.sh
     chmod 755 installer.sh
     Print_Style "Completed!" "$GREEN"
     whiptail --title "Script Updated" --msgbox "This script has been automatically updated to version $ONLINE_VERSION!" $((LINES*3/4)) $((COLUMNS*7/10))
