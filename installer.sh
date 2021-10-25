@@ -99,13 +99,13 @@ CheckDep() {
 CheckDep curl
 CheckDep grep
 CheckDep usbmuxd
-if [ "$OS" != "Darwin" ]; then
+if [ "$OS" = "Darwin" ]; then
+  CheckDep newt
+  CheckDep libimobiledevice
+else
   CheckDep whiptail
   CheckDep libimobiledevice6
   CheckDep libimobiledevice-utils
-else
-  CheckDep newt
-  CheckDep libimobiledevice
 fi
 
 # We need Internet
