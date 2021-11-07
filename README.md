@@ -1,6 +1,6 @@
 # checkra1n-linux
 ## a simple all-architecture checkra1n installer
-Works on x86, x86\_64, ARM and ARM64! On _any_ Linux platform. 
+Works on x86, x86\_64, ARM and ARM64! On _any_ Linux platform.
 
 Like, you can run checkra1n on a rooted Android, and it will work.
 
