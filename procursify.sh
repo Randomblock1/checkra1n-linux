@@ -2,8 +2,8 @@
 # shellcheck disable=SC2162
 set -e
 
-Print_Style () {
-  printf "%s\n" "${2}$1${NORMAL}"
+Print_Style() {
+	printf "%s\n" "${2}$1${NORMAL}"
 }
 
 NORMAL=$(tput sgr0)
@@ -12,7 +12,6 @@ GREEN=$(tput setaf 2)
 CYAN=$(tput setaf 6)
 BRIGHT=$(tput bold)
 REVERSE=$(tput smso)
-
 
 if [[ $1 = -y ]]; then
 	AUTO=yes
@@ -43,18 +42,18 @@ if [[ $AUTO != yes ]]; then
 	read -p "Press enter to continue"
 fi
 
-if ! which curl >> /dev/null; then
+if ! which curl >>/dev/null; then
 	Print_Style "Error: curl not found" "$RED"
 	exit 1
 fi
 if [[ "${ARM}" = yes ]]; then
-	if ! which zsh >> /dev/null; then
+	if ! which zsh >>/dev/null; then
 		Print_Style "Error: zsh not found" "$RED"
 		exit 1
 	fi
 else
-	if which iproxy >> /dev/null; then
-		iproxy 42264 44 >> /dev/null 2>/dev/null &
+	if which iproxy >>/dev/null; then
+		iproxy 42264 44 >>/dev/null 2>/dev/null &
 		trap 'killall iproxy 2>/dev/null' ERR
 	else
 		Print_Style "Error: iproxy not found" "$RED"
@@ -73,7 +72,7 @@ rm -rf odyssey-tmp
 mkdir odyssey-tmp
 cd odyssey-tmp
 
-cat > odyssey-device-deploy.sh <<EOT
+cat >odyssey-device-deploy.sh <<EOT
 #!/bin/zsh
 set -e
 echo "path: \$PATH"

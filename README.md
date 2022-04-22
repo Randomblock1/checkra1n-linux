@@ -1,22 +1,27 @@
 # checkra1n-linux
-## a simple all-architecture checkra1n installer
-Works on x86, x86\_64, ARM and ARM64! On _any_ Linux platform.
 
-Like, you can run checkra1n on a rooted Android, and it will work.
+## a simple all-architecture checkra1n installer
+
+Works on x86, x86_64, ARM and ARM64! On _any_ Linux platform.
+
+Like, you can run checkra1n on a rooted Android, and it will work (true story).
 
 ## one liner
+
 run without installing:
 `curl -s https://raw.githubusercontent.com/Randomblock1/checkra1n-linux/master/installer.sh | sudo bash`
 (note: you can't use procursify unless you actually install it)
 
 ## install
+
 `git clone https://github.com/Randomblock1/checkra1n-linux && cd checkra1n-linux`
 
 `./installer.sh`
 
 ## how to use
+
 - "Install Repo"
-  - This will install the checkra1n APT repo, but only if you are using x86\_64.
+  - This will install the checkra1n APT repo, but only if you are using x86_64.
 - "Direct Download"
   - Installs checkra1n to /usr/bin for all devices, regardless of architecture.
 - "Procursify"
@@ -26,13 +31,10 @@ run without installing:
 - "Credits"
   - Is self explanatory
 - "Update"
-  - Uses curl to get the latest version of this tool. You shouldn't need to use this manually, as it updates itself on startup.
+  - Uses `curl` to get the latest version of this tool. You shouldn't need to use this manually, as it updates itself on startup.
 
 If you are not on a Debian based system, you may need to install dependencies manually. Just Google any errors and see if it means you're missing something.
 
 It requires `grep, usbmuxd, curl, whiptail, libimobiledevice6 (+utils)`
 
 Please put any issues in the GitHub Issue tracker and feel free to make pull requests.
-
-## todo
-add support for systems that are not Debian or MacOS
