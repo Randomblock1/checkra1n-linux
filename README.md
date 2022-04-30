@@ -1,5 +1,7 @@
 # checkra1n-linux
 
+![header image](header.jpg)
+
 ## a simple all-architecture checkra1n installer
 
 Works on x86, x86_64, ARM and ARM64! On **any** Linux platform.
