@@ -67,12 +67,6 @@ elif [ -f /etc/debian_version ]; then
   # Older Debian/Ubuntu/etc.
   OS=Debian
   VER=$(cat /etc/debian_version)
-elif [ -f /etc/SuSe-release ]; then
-  # Older SuSE/etc.
-  ...
-elif [ -f /etc/redhat-release ]; then
-  # Older Red Hat, CentOS, etc.
-  ...
 else
   # Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
   OS=$(uname -s)
@@ -127,19 +121,19 @@ GetDL() {
     DL_LINK=$(curl -s https://checkra.in/releases/ | grep "https:\/\/assets.checkra.in\/downloads\/linux\/cli\/$1\/.*\/checkra1n" -o)
   }
   Print_Style "Getting latest download..." "$YELLOW"
-  if [[ "$CPUArch" == *"aarch64"* || "$CPUArch" == *"arm64"* ]]; then
+  if [[ "$CPUArch" == "aarch64*" || "$CPUArch" == "arm64" ]]; then
     Print_Style "ARM64 detected!" "$YELLOW"
     FindDL arm64
 
-  elif [[ "$CPUArch" == *"armhf"* || "$CPUArch" == *"armv"* ]]; then
+  elif [[ "$CPUArch" == "armhf" || "$CPUArch" == "armv*" ]]; then
     Print_Style "ARM detected!" "$YELLOW"
     FindDL arm
 
-  elif [[ "$CPUArch" == *"x86_64"* ]]; then
+  elif [[ "$CPUArch" == "x86_64" ]]; then
     Print_Style "x86_64 detected!" "$YELLOW"
     FindDL x86_64
 
-  elif [[ "$CPUArch" == *"x86"* || "$CPUArch" == *"i686"* ]]; then
+  elif [[ "$CPUArch" == "x86" || "$CPUArch" == "i*86" ]]; then
     Print_Style "x86 detected!" "$YELLOW"
     FindDL i486
 

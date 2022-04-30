@@ -2,7 +2,7 @@
 
 ## a simple all-architecture checkra1n installer
 
-Works on x86, x86_64, ARM and ARM64! On _any_ Linux platform.
+Works on x86, x86*64, ARM and ARM64! On \_any* Linux platform.
 
 Like, you can run checkra1n on a rooted Android, and it will work (true story).
 
@@ -20,12 +20,12 @@ run without installing:
 
 ## how to use
 
-- "Install Repo"
-  - This will install the checkra1n APT repo, but only if you are using x86_64.
+- "Install Repository"
+  - This will install the checkra1n APT repository, but only if you are using x86_64.
 - "Direct Download"
   - Installs checkra1n to /usr/bin for all devices, regardless of architecture.
 - "Procursify"
-  - Installs the Procursus bootstrap to your device. Learn more about Procursus [here](https://github.com/ProcursusTeam/Procursus). TLDR: Replaces Substrate with libhooker and uses the Procursus repo for more up-to-date programs. Also, you get Sileo, in addition to Cydia.
+  - Installs the Procursus bootstrap to your device. Learn more about Procursus [here](https://github.com/ProcursusTeam/Procursus). TLDR: Replaces Substrate with libhooker and uses the Procursus repositoryfor more up-to-date programs. Also, you get Sileo, in addition to Cydia.
 - “Save Blobs”
   - Saves currently signed SHSH blobs so you can upgrade/downgrade to unsigned iOS versions if you have the right blobs.
 - "Credits"
